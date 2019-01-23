@@ -2,77 +2,89 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.List;
 import java.util.ArrayList;
 
 public class ArrayTest {
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        System.out.println(ArrayTest.countEvensByCicle(new int[] { 3, 4, 5, 6, 7 }));
+    }
+
+    public static int countEvensByCicle(int[] nums) {
+        int count = 0;
+
+        for (int i:nums) {
+            if (i % 2 == 0) {
+                count = ++count;  // count++ not good
+            }
+        }
+
+        return count;
+    }
+
+    public static int countEvensByStreamFilter(int[] nums) {
+        return (int) IntStream.of(nums).boxed().filter(i -> i % 2 == 0).count();
+    }
 
     public static void createIntArray() {
         int[] arr1 = { 1, 2, 3 };
         int [] arr2 = new int[] { 3, 4, 5, 6, 7 };
         var arr3 = new int[] { 3, 4, 5, 6, 7 };
-
-        System.out.println(arr1);
-        System.out.println(Arrays.toString(arr1));
-        System.out.println(Arrays.toString(arr2));
-        System.out.println(Arrays.toString(arr3));
     }
 
-    public static void firsTwoByStream(int[] nums) {
-        int[] result = IntStream.of(nums).limit(2).toArray();
-
-        ArrayTest.printIntArr(result);
+    public static int[] firsTwoByStream(int[] nums) {
+        return IntStream.of(nums).limit(2).toArray();
     }
 
-    public static void firsTwoByCollection(int[] nums) {
+    public static int[] firsTwoByArraysStream(int[] nums) {
+        return Arrays.stream(nums, 0, 2).toArray();
+    }
+
+    public static int[] firsTwoByCollection(int[] nums) {
         List<Integer> list = IntStream.of(nums).boxed().collect(Collectors.toList());
-        int[] result = list.subList(0, 2).stream().mapToInt(i -> i).toArray();
 
-        ArrayTest.printIntArr(result);
+        return list.subList(0, 2).stream().mapToInt(i -> i).toArray();
     }
 
-    public static void transformToListByCicle(int[] nums) {
+    public static List<Integer> transformToListByCicle(int[] nums) {
         List<Integer> list = new ArrayList<Integer>();
 
         for (int i:nums) {
             list.add(i);
         }
 
-        System.out.println(list);
+        return list;
     }
 
-    public static void transformToListByStream(int[] nums) {
-        var list = Arrays.stream(nums).boxed().collect(Collectors.toList()); // or IntStream.of(nums).boxed()... not Stream.of(nums)...
-        System.out.println(list);
+    public static List<Integer> transformToListByStream(int[] nums) {
+        return Arrays.stream(nums).boxed().collect(Collectors.toList()); // or IntStream.of(nums).boxed()... not Stream.of(nums)...
     }
 
-    public static void sum1(int[] nums) {
-        int sum = IntStream.of(nums).sum();
-        System.out.println(sum);
+    public static int sum1(int[] nums) {
+        return IntStream.of(nums).sum();
     }
 
-    public static void sum2(int[] nums) {
+    public static int sum2(int[] nums) {
         int result = 0;
 
-        for (var i:nums) {      // or for (int i:nums)
+        for (int i:nums) {      // or for (var i:nums)
           result = result + i;
         }
 
-        System.out.println(result);
+        return result;
     }
 
-    public static void reverse(int[] nums) {
+    public static int[] reverseByCollections(int[] nums) {
         var list = IntStream.of(nums).boxed().collect(Collectors.toList()); // or Arrays.stream(nums).boxed().collect(Collectors.toList());
         Collections.reverse(list);
-        int[] reversed = list.stream().mapToInt(i -> i).toArray();   // i -> i automaticali transform to  i -> i.intValue()
 
-        System.out.println(nums);
-        System.out.println(Arrays.stream(reversed).boxed().collect(Collectors.toList()));
+        return list.stream().mapToInt(i -> i).toArray();   // i -> i automaticali transform to  i -> i.intValue()
+
     }
 
-    public static void isContainsByCilcle(int[] nums, int n) {
+    public static Boolean isContainsByCilcle(int[] nums, int n) {
         Boolean result = false;
 
         for (int i:nums) {
@@ -83,54 +95,45 @@ public class ArrayTest {
             }
         }
 
-        System.out.println(result);
+        return result;
     }
 
-    public static void isContainsByStream(int[] nums, int n) {
-        List<Integer> list = IntStream.of(nums).boxed().collect(Collectors.toList());
-        System.out.println(list.contains(n));
+    public static Boolean isContainsByStream(int[] nums, int n) {
+        return IntStream.of(nums).boxed().collect(Collectors.toList()).contains(n);
     }
 
-    public static void concatByCicle(int[] a, int[] b) {
+    public static int[] concatByCicle(int[] a, int[] b) {
         int[] result = new int[a.length + b.length];
 
         for (int i = 0; i < result.length; i++) {
             result[i] = i < a.length ? a[i] : b[i - a.length];
         }
 
-        System.out.println(IntStream.of(result).boxed().collect(Collectors.toList()));
+        return result;
     }
 
-    public static void concatByListTransform(int[] a, int[] b) {
+    public static int[] concatByListTransform(int[] a, int[] b) {
         var list = IntStream.of(a).boxed().collect(Collectors.toList());
         list.addAll(IntStream.of(b).boxed().collect(Collectors.toList()));
         int[] result = list.stream().mapToInt(i -> i).toArray();
 
-        System.out.println(list);
+        return result;
     }
 
-    public static void concatByFlatMap(int[] a, int[] b) {
-        int [] result = Stream.of(IntStream.of(a), IntStream.of(b)).flatMapToInt(i -> i).toArray(); // or Stream.of(new int[][] { a, b }).flatMapToInt(IntStream::of).toArray();
-
-        System.out.println(IntStream.of(result).boxed().collect(Collectors.toList()));
+    public static int[] concatByFlatMap(int[] a, int[] b) {
+        return Stream.of(IntStream.of(a), IntStream.of(b)).flatMapToInt(i -> i).toArray(); // or Stream.of(new int[][] { a, b }).flatMapToInt(IntStream::of).toArray();
     }
 
-    public static void concatByStreamConcat(int[] a, int[] b) {
-        int [] result = Stream.concat(IntStream.of(a).boxed(), IntStream.of(b).boxed()).mapToInt(i -> i).toArray();
-
-        System.out.println(IntStream.of(result).boxed().collect(Collectors.toList()));
+    public static int[] concatByStreamConcat(int[] a, int[] b) {
+        return Stream.concat(IntStream.of(a).boxed(), IntStream.of(b).boxed()).mapToInt(i -> i).toArray();
     }
 
-    public static void maxByCollections(int[] nums) {
-        List<Integer> list = IntStream.of(nums).boxed().collect(Collectors.toList());
-
-        System.out.println(Collections.max(list));
+    public static int maxByCollections(int[] nums) {
+        return Collections.max(IntStream.of(nums).boxed().collect(Collectors.toList()));
     }
 
-    public static void maxByStream(int[] nums) {
-        var max = IntStream.of(nums).max().getAsInt();
-
-        System.out.println(max);
+    public static int maxByStream(int[] nums) {
+        return IntStream.of(nums).max().getAsInt();
     }
 
     public int[] fix23(int[] nums) {
