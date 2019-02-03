@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 import java.util.List;
+import java.lang.Math;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,8 @@ import java.util.ArrayList;
 public class StreamCalc {
     public static void main(String[] args) {
         int[] nums = new int[] { 3, 4, 5, 6, 7 };
-        System.out.println(StreamCalc.bigDiff(nums));
+        // Boolean[] bools = new Boolean[] { true,  true,  true,  false, true,  true,  true,  true, true,  false, true };
+        System.out.println(StreamCalc.findShort("asdsad asda sd"));
     }
 
     public static int bigDiff(int[] nums) {
@@ -90,5 +92,48 @@ public class StreamCalc {
 
     public static void printIntArr(int[] nums) {
         System.out.println(IntStream.of(nums).boxed().collect(Collectors.toList()));
+    }
+
+    public static int findShort(String s) {
+        return Stream.of(s.split(" ")).mapToInt(String::length).min().getAsInt();
+        // return Arrays.stream(s.split(" ")).map(String::length).min(Comparator.naturalOrder()).get();
+        //Stream.of(s.split(" ")).map(word -> word.length()).min(Math::min).get();  // dont do that!!! now work correctly
+       //return Stream.of(s.split(" ")).reduce(s.length(), (x, y) -> x > y.length() ? y.length() : x, (x, y) -> x > y ? y : x);
+    }
+
+    public static int сonvertBinaryArrayToInt(List<Integer> binary) {
+        return binary.stream().reduce(0, (x, y)-> x * 2 + y);
+    }
+
+    public static int summation(int num) {
+        return IntStream.rangeClosed(1, num).sum();
+        // return IntStream.iterate(1, n -> ++n).limit(num).sum();
+        // return  n*(n+1)/2;
+
+        // public static int summation(int n) {
+        //     if (n == 1)
+        //       return 1;
+        //     return summation(n-1) + n;
+        // }
+    }
+
+    public String dnaToRna(String dna) {
+        return dna.replace('U', 'X').replace('T', 'U').replace('X', 'T'); // or dna.replace('U', 'X')?s
+    }
+
+    public static int chekNull(Boolean[] arr) {
+        return (int) Stream.of(arr).filter(Boolean::booleanValue).count();
+
+        // int count = 0;
+        // for (Boolean b : arrayOfSheeps) if (b) count++;
+        // return count;
+
+        // if(Boolean.TRUE.equals(sheep)) {
+        //     count++;
+        // }
+
+        // return (int) Stream.of(arr)
+        //                     .filter(i -> i != null && i == true)
+        //                     .count();
     }
 }
